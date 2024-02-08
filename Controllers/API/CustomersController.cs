@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace LibApp.Controllers.API
 {
@@ -16,6 +18,19 @@ namespace LibApp.Controllers.API
         public CustomersController(ApplicationDbContext context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
+        }
+
+        [Authorize(Roles = "Employee")] // Dodaj atrybut Authorize
+        [HttpGet("{id}/edit", Name = "EditCustomer")]
+        public IActionResult Edit(int id)
+        {
+            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
+            if (customerInDb == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customerInDb); 
         }
 
         // GET /api/customers
