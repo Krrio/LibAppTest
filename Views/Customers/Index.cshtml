@@ -35,7 +35,7 @@
                     {
                         data: "name",
                         render: function (data, type, customer) {
-                            return "<a href='customers/edit/" + customer.id + "'>" + customer.name + "</a>";
+                            return "<a href='#' class='js-details' data-customer-id='" + customer.id + "'>" + customer.name + "</a>";
                         }
                     },
                     {
@@ -48,6 +48,18 @@
                         }
                     }
                 ]
+            });
+
+            $("#customers").on("click", ".js-details", function (e) {
+                e.preventDefault();
+                var customerId = $(this).data("customer-id");
+                $.ajax({
+                    url: "/api/customers/" + customerId,
+                    method: "GET",
+                    success: function () {
+                        window.location.href = "/customers/details/" + customerId;
+                    }
+                });
             });
         });
     </script>
@@ -67,8 +79,7 @@
                         }
                     },
                     callback: function (result) {
-                        if (result)
-                        {
+                        if (result) {
                             console.log("ID:" + button.attr("data-customer-id"));
                             $.ajax({
                                 url: "/api/customers/" + button.attr("data-customer-id"),
@@ -78,7 +89,7 @@
                                 }
                             });
                         }
-                     }
+                    }
                 });
             });
         });
