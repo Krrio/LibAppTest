@@ -33,6 +33,24 @@
 
 <script>
     $(document).ready(function () {
-        $('#booksTable').DataTable();
+        $('#booksTable').DataTable({
+            ajax: {
+                url: '/api/BooksApi',
+                dataSrc: ''
+            },
+            columns: [
+                {
+                    data: 'title', render: function (data, type, row) {
+                        return '<a href="/Books/Details/' + row.id + '">' + data + '</a>';
+                    }
+                },
+                { data: 'genre.name' },
+                {
+                    data: 'id', render: function (data) {
+                        return '<a href="/Books/Details/' + data + '">Details</a>';
+                    }
+                }
+            ]
+        });
     });
 </script>
